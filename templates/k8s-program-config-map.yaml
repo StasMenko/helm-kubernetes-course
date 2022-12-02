@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config-map
+  namespace: {{ .Values.nameSpace }}
+  labels: {{ include "config-map.labels" . | indent 4 }}
+data:
+  SPRING_JPA_HIBERNATE_DDL_AUTO: update
+  USERS_APP_API: http://user-app-service:80/users/
+  SPRING_USER_DATASOURCE_URL: jdbc:postgresql://users-db-service:80/postgres
+  SPRING_POST_DATASOURCE_URL: jdbc:postgresql://posts-db-service:80/postgres
+  init.posts.db: |
+    CREATE TABLE posts
+    (
+    id INTEGER PRIMARY KEY,
+    author_id INTEGER,
+    topic CHARACTER VARYING(45),
+    text CHARACTER VARYING(200),
+    posted_at DATE
+    );
+
+    INSERT INTO posts VALUES (1, 1, 'topic-1', 'text-1', '2022-11-05');
+    INSERT INTO posts VALUES (2, 2, 'topic-2', 'text-2', '2022-11-06');
+    INSERT INTO posts VALUES (3, 3, 'topic-3', 'text-3', '2022-11-07');
+    INSERT INTO posts VALUES (4, 3, 'topic-4', 'text-4', '2022-11-08');
+  init.users.db: |
+    CREATE TABLE users
+    (
+    id INTEGER PRIMARY KEY,
+    user_name CHARACTER VARYING(30),
+    amount_of_posts INTEGER
+    );
+
+    INSERT INTO users VALUES (1, 'User-1', 1);
+    INSERT INTO users VALUES (2, 'User-2', 1);
+    INSERT INTO users VALUES (3, 'User-3', 2);
+    INSERT INTO users VALUES (4, 'User-4', 0);

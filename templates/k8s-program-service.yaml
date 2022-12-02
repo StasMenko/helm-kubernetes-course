@@ -1,0 +1,47 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: users-db-service
+  namespace: {{ .Values.nameSpace }}
+spec:
+  selector:
+    app: users-db-pod
+  ports:
+  - port: 80
+    targetPort: users-db-port
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: posts-db-service
+  namespace: {{ .Values.nameSpace }}
+spec:
+  selector:
+    app: posts-db-pod
+  ports:
+  - port: 80
+    targetPort: posts-db-port
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: user-app-service
+  namespace: {{ .Values.nameSpace }}
+spec:
+  selector:
+    app: user-app-pod
+  ports:
+  - port: 80
+    targetPort: user-app-port
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: post-app-service
+  namespace: {{ .Values.nameSpace }}
+spec:
+  selector:
+    app: post-app-pod
+  ports:
+  - port: 80
+    targetPort: post-app-port

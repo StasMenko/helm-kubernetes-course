@@ -1,0 +1,67 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-storage
+  namespace: {{ .Values.nameSpace }}
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: users-db-pv
+  namespace: {{ .Values.nameSpace }}
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: local-storage
+  hostPath:
+    path: /tmp/datadb/usersdb
+    type: DirectoryOrCreate
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: users-db-pvc
+  namespace: {{ .Values.nameSpace }}
+spec:
+  volumeName: users-db-pv
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: local-storage
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: posts-db-pv
+  namespace: {{ .Values.nameSpace }}
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: local-storage
+  hostPath:
+    path: /tmp/datadb/postsdb
+    type: DirectoryOrCreate
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: posts-db-pvc
+  namespace: {{ .Values.nameSpace }}
+spec:
+  volumeName: posts-db-pv
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: local-storage
+  resources:
+    requests:
+      storage: 5Gi
